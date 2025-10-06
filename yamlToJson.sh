@@ -1,39 +1,37 @@
 #!/bin/bash
-# -------------------------------------------
-# yaml_to_json.sh
-# A simple script to convert YAML → JSON
-# -------------------------------------------
 
-# Exit immediately if any command fails
+# convert a yaml file to json format
+
+# exit on fail
 set -e
 
-# Check that a filename argument was provided
+# Check for file
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <file.yaml>"
     exit 1
 fi
 
-# Input YAML file
+# yaml file
 INPUT_FILE="$1"
 
-# Verify that the file exists
+# make sure file exists
 if [ ! -f "$INPUT_FILE" ]; then
     echo "Error: File '$INPUT_FILE' not found."
     exit 1
 fi
 
-# Build output filename by replacing .yaml/.yml with .json
+# set output file name - same basename different extension
 OUTPUT_FILE="${INPUT_FILE%.*}.json"
 
-# Run Python inline to convert YAML → JSON
+# use Python
 python3 - <<EOF
 import sys, json, yaml
 
-# Read YAML file
+# Yaml
 with open("$INPUT_FILE", "r") as f:
     data = yaml.safe_load(f)
 
-# Write JSON output
+# create json file
 with open("$OUTPUT_FILE", "w") as f:
     json.dump(data, f, indent=4)
 
